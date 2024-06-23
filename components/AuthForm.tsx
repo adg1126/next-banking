@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 import { z } from 'zod';
@@ -13,8 +14,10 @@ import CustomInput from './CustomInput';
 
 import { authFormSchema } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
+import { signIn, signUp } from '@/lib/actions/userActions';
 
 export default function AuthForm({ type }: { type: String }) {
+  const router = useRouter();
   const [user, setUser] = useState(null),
     [isLoading, setIsLoading] = useState(false);
 
@@ -30,12 +33,28 @@ export default function AuthForm({ type }: { type: String }) {
   });
 
   // 2. Define a submit handler.
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     setIsLoading(true);
-    console.log(values);
-    setIsLoading(false);
+
+    try {
+      // Sign up with Appwrite & create plaid token
+      if (type === 'sign-up') {
+        const newUser = await signUp(data);
+        // setUser(newUser);
+      } else {
+        const res = await signIn({
+          email: data.email,
+          password: data.password,
+        });
+        // if (res) router.push('/');
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -100,6 +119,13 @@ export default function AuthForm({ type }: { type: String }) {
                     name='address1'
                     label='Address'
                     placeholder='Enter your address'
+                    type='text'
+                  />
+                  <CustomInput
+                    control={form.control}
+                    name='city'
+                    label='City'
+                    placeholder='Enter your city'
                     type='text'
                   />
                   <div className='flex gap-4'>
