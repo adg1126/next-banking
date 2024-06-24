@@ -48,6 +48,18 @@ export const signUp = async ({
   }
 };
 
+export const signOut = async () => {
+  try {
+    const { account } = await createSessionClient();
+
+    cookies().delete('appwrite-session');
+
+    await account.deleteSession('current');
+  } catch (err) {
+    return null;
+  }
+};
+
 export async function getLoggedInUser() {
   try {
     const { account } = await createSessionClient();
