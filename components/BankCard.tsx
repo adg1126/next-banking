@@ -10,7 +10,10 @@ export default function BankCard({
   showBalance,
 }: CreditCardProps) {
   return (
-    <div className='flex flex-col'>
+    <div
+      key={key}
+      className='flex flex-col'
+    >
       <Link
         href='/'
         className='bank-card'
