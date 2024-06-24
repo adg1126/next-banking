@@ -10,7 +10,6 @@ import { Control, FieldPath } from 'react-hook-form';
 import { z } from 'zod';
 
 import { authFormSchema } from '@/lib/utils';
-import { type } from 'os';
 
 const formSchema = authFormSchema('sign-up');
 

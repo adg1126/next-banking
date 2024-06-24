@@ -42,13 +42,14 @@ export default function AuthForm({ type }: { type: String }) {
       // Sign up with Appwrite & create plaid token
       if (type === 'sign-up') {
         const newUser = await signUp(data);
-        // setUser(newUser);
+        setUser(newUser);
       } else {
         const res = await signIn({
           email: data.email,
           password: data.password,
         });
-        // if (res) router.push('/');
+
+        if (res) router.push('/');
       }
     } catch (err) {
       console.log(err);
